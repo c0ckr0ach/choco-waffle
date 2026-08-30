@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DevOps Pipeline Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: #10b981;
+      color: #022c22;
+      margin-bottom: 1rem;
+    }
+    .status-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      font-family: monospace;
+      font-size: 0.9rem;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">Frontend: Online</div>
+    <h2>DevOps Deployment Demo</h2>
+    <p>This UI is served by NGINX and communicates with the Node.js API over an internal Docker network.</p>
+    
+    <div class="status-box" id="status">Fetching data from backend...</div>
+    
+    <button onclick="fetchData()">Refresh API Data</button>
+  </div>
+
+  <script>
+    async function fetchData() {
+      const statusBox = document.getElementById('status');
+      statusBox.textContent = 'Requesting /api/message...';
+      try {
+        const res = await fetch('/api/message');
+        const data = await res.json();
+        statusBox.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        statusBox.textContent = 'Error connecting to backend: ' + err.message;
+      }
+    }
+    fetchData();
+  </script>
+</body>
+</html>

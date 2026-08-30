@@ -1,5 +1,5 @@
 {
-    "name": "devops-backend-api",
+    "name": "devops-backend",
     "version": "1.0.0",
     "description": "2-tier backend api for ci/cd demo",
     "main": "server.js",
@@ -8,6 +8,6 @@
     },
     "dependencies": {
         "express": "^4.19.2",
-        "pg": "^8.11.5"
+        "cors":"^2.8.5"
     }
 }
