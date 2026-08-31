@@ -34,9 +34,9 @@ resource "aws_key_pair" "devops_key" {
 # firewall rule to allow ssh access
 resource "aws_security_group" "app_sg" {
     name = "devops_app_sg"
-    description = "allow imbound ssh, http and outbound internet"
+    description = "allow inbound ssh, http and outbound internet"
 
-    # imbound rules
+    # inbound rules
     ingress {
         description = "SSH access"
         from_port   = 22
@@ -55,6 +55,22 @@ resource "aws_security_group" "app_sg" {
         from_port   = 0
         to_port     = 0
         protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = ["0.0.0.0/0"] # not used in production
+    }
+}
+
+resource "aws_instance" "app_server" {
+    ami = data.aws_ami.ubuntu.id
+    instance_type = var.instance_type
+    key_name = aws_key_pair.devops_key.key_name
+
+    vpc_security_group_ids = [aws_security_group.app_sg.id]
+
+    user_data = <<-EOF
+                #!/bin/bash
+                # installs docker automatically on boot
+                EOF
+    tags = {
+        Name = "devops-production-host"
     }
 }
