@@ -41,12 +41,16 @@ resource "aws_security_group" "app_sg" {
         description = "SSH access"
         from_port   = 22
         to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 
     ingress {
         description = "Frontend application access"
         from_port   = 8080
         to_port     = 8080
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 
     # outbound rules
@@ -68,7 +72,11 @@ resource "aws_instance" "app_server" {
 
     user_data = <<-EOF
                 #!/bin/bash
-                # installs docker automatically on boot
+                apt-get update -y 
+                apt install -y docker.io docker-compose
+                systemctl start docker
+                systemctl enable docker
+                usermod -aG docker ubuntu
                 EOF
     tags = {
         Name = "devops-production-host"
